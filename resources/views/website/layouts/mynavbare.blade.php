@@ -44,7 +44,7 @@
                       </li>
 
                       <li class="nav-item"><a href="{{ route('about') }}" class="nav-link">About</a></li>
-                      <li class="nav-item"><a href="fashion.html" class="nav-link">Category</a></li>
+                      <li class="nav-item"><a href="{{ route('website.category') }}" class="nav-link">Category</a></li>
                       <li class="nav-item dropdown">
                           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown3" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                            Post Format

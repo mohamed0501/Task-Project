@@ -1,10 +1,12 @@
 <?php
 
 use App\Http\Controllers\Backend\DashboardController;
+use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Website\AboutController;
 use App\Http\Controllers\Website\HomeController;
 use App\Http\Controllers\Website\ContactController;
+use App\Http\Middleware\IsAdmin;
 use App\Models\Category;
 use App\Models\Post;
 
@@ -16,16 +18,27 @@ use App\Models\Post;
 Route::get('/', action: [HomeController::class,'index'])->name('home');
 Route::get('/contact', action: [ContactController::class,'index'])->name('contact');
 Route::get('/about', action: [AboutController::class,'index'])->name('about');
+Route::get('/categories', action: [App\Http\Controllers\Website\PageController::class,'category'])->name('website.category');
+Route::get('/category/{id}/posts', action: [App\Http\Controllers\Website\PageController::class,'categoryPosts'])->name('post.category');
 
-
-
-Route::get('/dashboard', action: [DashboardController::class,'index'])->name('dashboard');
-Route::resource('category', App\Http\Controllers\Backend\Category\CategoryController::class);
-Route::resource('post', App\Http\Controllers\Backend\Post\PostController::class);
 
 // Route::get('category-fake',function(){
+
 //         Category:: factory()->count(10)->create();
 // });
 // Route::get('post-fake',function(){
 //         Post:: factory()->count(100)->create();
 // });
+
+Route::get('/postdetails', function(){
+    
+    return view('website.postdetails');
+})->name('post.details');
+
+
+
+Route::prefix('admin')->middleware([IsAdmin::class])->group(function () {
+Route::get('/dashboard', action: [DashboardController::class,'index'])->name('dashboard');
+Route::resource('category', App\Http\Controllers\Backend\Category\CategoryController::class);
+Route::resource('post', App\Http\Controllers\Backend\Post\PostController::class);
+});

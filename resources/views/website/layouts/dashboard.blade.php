@@ -7,7 +7,7 @@
 @include('website.layouts.head')
 
 <body>
-@include('website.layouts.navbare')
+@include('website.layouts.mynavbare')
 
 @yield('content')
 
