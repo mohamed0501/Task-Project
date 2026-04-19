@@ -3,6 +3,11 @@
 @section('content')
     <div class="container-fluid">
         <h1 class="h3 mb-4 text-gray-800">POSTS</h1>
+        @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
     <a href="{{ route('post.create') }}" class="btn btn-primary mb-3">Add New Post</a>
          <table class="table table-hover">
                 <thead>
@@ -11,6 +16,7 @@
                     <th scope="col">Image</th>
                     <th scope="col">Title</th>
                     <th scope="col">Category</th>
+                    <th scope="col">Created By</th>
                     <th scope="col">Actions</th>
                     
                   </tr>
@@ -21,9 +27,18 @@
 
                   <tr>
                     <th scope="row">{{ $loop->iteration }}</th>
+                    @if($post->image)
                     <td><img src="{{ asset('storage/' . $post->image) }}" alt="Post Image" width="100"></td>
+                    @else
+                    <td>No Image</td>
+                    @endif
                     <td>{{ $post->title }}</td>
                     <td>{{ $post->category->name }}</td>
+                    @if($post->user)
+                    <td>{{ $post->user->name }}</td>
+                    @else
+                    <td>Unknown</td>
+                    @endif
                     <td>
                         <a href="{{ route('post.edit', $post) }}" class="btn btn-sm btn-info">Edit</a>
                         <form action="{{ route('post.destroy', $post) }}" method="POST" class="d-inline">
@@ -40,5 +55,6 @@
                         @endforelse
                 </tbody>
               </table>
+              {{ $posts->links() }}
     </div>
 @endsection

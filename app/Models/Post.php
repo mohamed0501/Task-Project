@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth as FacadesAuth;
 use Illuminate\Support\Str;
 
@@ -21,9 +22,12 @@ class Post extends Model
     public static function booted(){
         static::creating(function($post){
 
-            $post->slug = Str::slug($post->title);
+          //  $post->slug = Str::slug($post->title);
+          $post->slug = self::generateSlug($post->title);
           //  $post->createdby = FacadesAuth::user()->id;
+              $post->createdby = FacadesAuth::user()->id;
         });
+        Paginator::useBootstrap();
     }
     protected function title(){
         return Attribute::make(
@@ -36,4 +40,15 @@ class Post extends Model
         return $this->belongsTo(Category::class);
     }
 
+    public function user(){
+        return $this->belongsTo(User::class,'createdby');
+    }
+
+    public static function generateSlug($title)
+{
+    $slug = Str::slug($title);
+    $count = static::where('slug', 'LIKE', "{$slug}%")->count();
+
+    return $count ? "{$slug}-{$count}" : $slug;
+}
 }

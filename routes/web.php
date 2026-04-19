@@ -83,3 +83,9 @@ require __DIR__.'/auth.php';
 // Route::resource('category', App\Http\Controllers\Backend\Category\CategoryController::class);
 // Route::resource('post', App\Http\Controllers\Backend\Post\PostController::class);
 // });
+
+
+
+Route::get('/test', function () {
+    return view('mail.welcome_mail');
+});
